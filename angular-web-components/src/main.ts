@@ -5,10 +5,10 @@ import { Type } from '@angular/core';
 /* Import polyfills here instead of angular.json */
 import 'zone.js';
 
-import { TestComponentComponent } from './components/test-component/test-component.component';
+import { WeatherWidgetComponent } from './components/weather-widget/weather-widget.component';
 
 const webComponents: [[Type<any>, string]] = [
-  [TestComponentComponent, 'test-component'],
+  [WeatherWidgetComponent, 'weather-widget'],
 ];
 
 createApplication()
@@ -20,6 +20,6 @@ createApplication()
       customElements.define(selector, ngElement);
     });
 
-    //app.bootstrap(TestComponentComponent);
+    //app.bootstrap(LayoutComponent);
   })
   .catch((err) => console.error(err));

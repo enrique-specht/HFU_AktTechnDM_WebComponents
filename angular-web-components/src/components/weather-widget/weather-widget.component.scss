@@ -1,0 +1,46 @@
+:host {
+  .widget {
+    box-shadow: rgba(0, 0, 0, 0.1) 0rem 0.1rem 1rem;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    max-width: fit-content;
+  }
+
+  .weather {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .location-time {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .today {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    .weather-info {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .forecast {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    .forecast-day {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding: 0.25rem;
+    }
+  }
+}
