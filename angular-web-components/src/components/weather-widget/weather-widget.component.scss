@@ -1,4 +1,8 @@
 :host {
+  .float-right {
+    float: right;
+  }
+
   .widget {
     box-shadow: rgba(0, 0, 0, 0.1) 0rem 0.1rem 1rem;
     border-radius: 0.5rem;
@@ -8,32 +12,51 @@
 
   .weather {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 1rem;
   }
 
   .location-time {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid black;
   }
 
   .today {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
+    width: 25rem;
+    height: 5rem;
+    padding-top: 0.5rem;
+
+    .temperature {
+      width: 4rem;
+      text-align: right;
+    }
+
+    .weather-code {
+      width: 5rem;
+
+      img {
+        height: 100%;
+        width: 100%;
+      }
+    }
 
     .weather-info {
       display: flex;
       flex-direction: column;
+      min-width: 11rem;
     }
   }
 
   .forecast {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    width: 25rem;
 
     .forecast-day {
       display: flex;
@@ -42,5 +65,18 @@
       text-align: center;
       padding: 0.25rem;
     }
+
+    .forecast-weather-icon {
+      height: 3rem;
+      margin: auto;
+    }
+  }
+
+  .license {
+    font-size: 0.5rem;
+    width: 100%;
+    display: block;
+    text-align: right;
+    margin-top: 0.5rem;
   }
 }

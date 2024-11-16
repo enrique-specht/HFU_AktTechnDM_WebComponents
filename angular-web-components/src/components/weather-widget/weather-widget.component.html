@@ -1,64 +1,78 @@
 <div class="widget">
   <div class="location-time">
     <span>Furtwangen im Schwarzwald</span>
-    <span>Samstag, 12:39</span>
+    <span>
+      {{
+        currentWeather.time | date : "EEEE, H:mm" : locationTimezone : "de-de"
+      }}
+    </span>
   </div>
   <div class="weather">
     <div class="today">
-      <span class="temperature">13°C</span>
+      <span class="temperature">
+        @if (currentWeather.temperature2m) {
+        <span>
+          {{ (currentWeather.temperature2m | number : "1.0-2") + "°C" }}
+        </span>
+        }
+      </span>
       <div class="weather-code">
-        <img />
-        <span>Bewölkt</span>
+        @if (currentWeather.weatherCode && weatherCodes) {
+        <img [src]="weatherCodes[currentWeather.weatherCode]?.day.image" />
+        }
       </div>
+
       <div class="weather-info">
-        <span>Niederschlag: 12%</span>
-        <span>Luftfeuchtigkeit: 52%</span>
-        <span>Wind: 2km/h</span>
+        <span>
+          Niederschlag:
+          <span class="float-right">
+            @if (currentWeather.precipitation != undefined) {
+            <span [innerHTML]="currentWeather.precipitation"></span>
+            }%
+          </span>
+        </span>
+        <span>
+          Luftfeuchtigkeit:
+          <span class="float-right">
+            @if (currentWeather.relativeHumidity2m != undefined) {
+            <span [innerHTML]="currentWeather.relativeHumidity2m"></span>
+            }%
+          </span>
+        </span>
+        <span>
+          Wind:
+          <span class="float-right">
+            @if (currentWeather.windSpeed10m != undefined) {
+            <span
+              [innerHTML]="currentWeather.windSpeed10m | number : '1.0-1'"
+            ></span>
+            } km/h
+          </span>
+        </span>
       </div>
     </div>
     <div class="forecast">
+      @for(forecast of forecastWeather; track forecast.time) {
       <div class="forecast-day">
+        @if (forecast.time?.getDate() === dateToday.getDate()) {
         <span>Heute</span>
-        <img />
-        <span>18°</span>
-        <span>11°</span>
+        } @else {
+        <span>
+          {{ forecast.time | date : "EE" : locationTimezone : "de-de" }}
+        </span>
+        } @if (forecast.weatherCode && weatherCodes) {
+        <img
+          class="forecast-weather-icon"
+          [src]="weatherCodes[forecast.weatherCode]?.day.image"
+        />
+        }
+        <span>{{ (forecast.temperature2mMax | number : "1.0-0") + "°" }}</span>
+        <span>{{ (forecast.temperature2mMin | number : "1.0-0") + "°" }}</span>
       </div>
-      <div class="forecast-day">
-        <span>So</span>
-        <img />
-        <span>18°</span>
-        <span>11°</span>
-      </div>
-      <div class="forecast-day">
-        <span>Mo</span>
-        <img />
-        <span>18°</span>
-        <span>11°</span>
-      </div>
-      <div class="forecast-day">
-        <span>Di</span>
-        <img />
-        <span>18°</span>
-        <span>11°</span>
-      </div>
-      <div class="forecast-day">
-        <span>Mi</span>
-        <img />
-        <span>18°</span>
-        <span>11°</span>
-      </div>
-      <div class="forecast-day">
-        <span>Do</span>
-        <img />
-        <span>18°</span>
-        <span>11°</span>
-      </div>
-      <div class="forecast-day">
-        <span>Fr</span>
-        <img />
-        <span>18°</span>
-        <span>11°</span>
-      </div>
+      } @empty {}
     </div>
   </div>
+  <small class="license">
+    <a href="https://open-meteo.com/">Weather data by open-meteo.com</a>
+  </small>
 </div>
