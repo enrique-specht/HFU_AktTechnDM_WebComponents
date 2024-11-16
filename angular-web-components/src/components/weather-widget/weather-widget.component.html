@@ -3,22 +3,22 @@
     <span>Furtwangen im Schwarzwald</span>
     <span>
       {{
-        currentWeather.time | date : "EEEE, H:mm" : locationTimezone : "de-de"
+        currentWeather().time | date : "EEEE, H:mm" : locationTimezone : "de-de"
       }}
     </span>
   </div>
   <div class="weather">
     <div class="today">
       <span class="temperature">
-        @if (currentWeather.temperature2m) {
+        @if (currentWeather().temperature2m) {
         <span>
-          {{ (currentWeather.temperature2m | number : "1.0-2") + "°C" }}
+          {{ (currentWeather().temperature2m | number : "1.0-2") + "°C" }}
         </span>
         }
       </span>
       <div class="weather-code">
-        @if (currentWeather.weatherCode && weatherCodes) {
-        <img [src]="weatherCodes[currentWeather.weatherCode]?.day.image" />
+        @if (currentWeather().weatherCode && weatherCodes) {
+        <img [src]="weatherCodes[currentWeather().weatherCode!]?.day.image" />
         }
       </div>
 
@@ -26,25 +26,25 @@
         <span>
           Niederschlag:
           <span class="float-right">
-            @if (currentWeather.precipitation != undefined) {
-            <span [innerHTML]="currentWeather.precipitation"></span>
+            @if (currentWeather().precipitation != undefined) {
+            <span [innerHTML]="currentWeather().precipitation"></span>
             }%
           </span>
         </span>
         <span>
           Luftfeuchtigkeit:
           <span class="float-right">
-            @if (currentWeather.relativeHumidity2m != undefined) {
-            <span [innerHTML]="currentWeather.relativeHumidity2m"></span>
+            @if (currentWeather().relativeHumidity2m != undefined) {
+            <span [innerHTML]="currentWeather().relativeHumidity2m"></span>
             }%
           </span>
         </span>
         <span>
           Wind:
           <span class="float-right">
-            @if (currentWeather.windSpeed10m != undefined) {
+            @if (currentWeather().windSpeed10m != undefined) {
             <span
-              [innerHTML]="currentWeather.windSpeed10m | number : '1.0-1'"
+              [innerHTML]="currentWeather().windSpeed10m | number : '1.0-1'"
             ></span>
             } km/h
           </span>
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div class="forecast">
-      @for(forecast of forecastWeather; track forecast.time) {
+      @for(forecast of forecastWeather(); track forecast.time) {
       <div class="forecast-day">
         @if (forecast.time?.getDate() === dateToday.getDate()) {
         <span>Heute</span>

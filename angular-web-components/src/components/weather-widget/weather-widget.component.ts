@@ -1,6 +1,6 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { fetchWeatherApi } from 'openmeteo';
 import { firstValueFrom } from 'rxjs';
 
@@ -31,16 +31,13 @@ export class WeatherWidgetComponent implements OnInit {
   private forecastDays = 7;
   private autoReloadInMs = 10 * 60 * 1000; // 10 min
   private locationLatLong = [48.0516, 8.2072];
-  protected currentWeather: currentWeather = {};
-  protected forecastWeather: forecastWeather = [];
+  protected currentWeather = signal<currentWeather>({});
+  protected forecastWeather = signal<forecastWeather>([]);
   protected dateToday = new Date();
   protected locationTimezone = 'CET';
   protected weatherCodes: any;
 
-  constructor(
-    private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly httpClient: HttpClient
-  ) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   ngOnInit(): void {
     this.weatherApi();
@@ -48,11 +45,11 @@ export class WeatherWidgetComponent implements OnInit {
       this.weatherApi();
     }, this.autoReloadInMs);
 
-    firstValueFrom(this.httpClient.get('./weathercode_icons.json')).then(
-      (weathercode) => {
+    firstValueFrom(this.httpClient.get('./weathercode_icons.json'))
+      .then((weathercode) => {
         this.weatherCodes = weathercode;
-      }
-    );
+      })
+      .catch(() => {});
   }
 
   async weatherApi(): Promise<void> {
@@ -84,18 +81,18 @@ export class WeatherWidgetComponent implements OnInit {
 
     this.locationTimezone = response.timezoneAbbreviation()!;
 
-    this.currentWeather = {
+    this.currentWeather.set({
       time: new Date(Number(current.time()) * 1000),
       temperature2m: current.variables(0)!.value(),
       relativeHumidity2m: current.variables(1)!.value(),
       precipitation: current.variables(2)!.value(),
       weatherCode: current.variables(3)!.value(),
       windSpeed10m: current.variables(4)!.value(),
-    };
+    });
 
-    this.forecastWeather = [];
+    const tempForecastWeather: forecastWeather = [];
     for (let index = 0; index < this.forecastDays; index++) {
-      this.forecastWeather.push({
+      tempForecastWeather.push({
         time: range(
           Number(daily.time()),
           Number(daily.timeEnd()),
@@ -106,10 +103,6 @@ export class WeatherWidgetComponent implements OnInit {
         temperature2mMin: daily.variables(2)!.valuesArray()![index],
       });
     }
-
-    this.changeDetectorRef.detectChanges();
-
-    console.log('Updated current weather:', this.currentWeather);
-    console.log('Updated forecast weather:', this.forecastWeather);
+    this.forecastWeather.set(tempForecastWeather);
   }
 }
