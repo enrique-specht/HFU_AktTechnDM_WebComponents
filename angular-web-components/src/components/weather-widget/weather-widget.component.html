@@ -27,15 +27,21 @@
           Niederschlag:
           <span class="float-right">
             @if (currentWeather().precipitation != undefined) {
-            <span [innerHTML]="currentWeather().precipitation"></span>
-            }%
+            <span
+              [innerHTML]="currentWeather().precipitation | number : '1.0-1'"
+            ></span>
+            }mm
           </span>
         </span>
         <span>
           Luftfeuchtigkeit:
           <span class="float-right">
             @if (currentWeather().relativeHumidity2m != undefined) {
-            <span [innerHTML]="currentWeather().relativeHumidity2m"></span>
+            <span
+              [innerHTML]="
+                currentWeather().relativeHumidity2m | number : '1.0-0'
+              "
+            ></span>
             }%
           </span>
         </span>
