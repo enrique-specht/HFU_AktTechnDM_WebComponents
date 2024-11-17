@@ -18,7 +18,7 @@
       </span>
       <div class="weather-code">
         @if (currentWeather().weatherCode && weatherCodes) {
-        <img [src]="weatherCodes[currentWeather().weatherCode!]?.day.image" />
+        <img [src]="weatherCodes[currentWeather().weatherCode!].day.image" />
         }
       </div>
 
@@ -63,7 +63,7 @@
         } @if (forecast.weatherCode && weatherCodes) {
         <img
           class="forecast-weather-icon"
-          [src]="weatherCodes[forecast.weatherCode]?.day.image"
+          [src]="weatherCodes[forecast.weatherCode].day.image"
         />
         }
         <span>{{ (forecast.temperature2mMax | number : "1.0-0") + "°" }}</span>

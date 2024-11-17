@@ -1,21 +1,20 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, signal } from '@angular/core';
 import { fetchWeatherApi } from 'openmeteo';
-import { firstValueFrom } from 'rxjs';
+import weatherCodeJson from '../../json/weathercode_icons.json';
 
 type currentWeather = {
   time?: Date;
   temperature2m?: number;
   relativeHumidity2m?: number;
   precipitation?: number;
-  weatherCode?: number;
+  weatherCode?: keyof typeof weatherCodeJson;
   windSpeed10m?: number;
 };
 
 type forecastWeather = {
   time?: Date;
-  weatherCode?: number;
+  weatherCode?: keyof typeof weatherCodeJson;
   temperature2mMax?: number;
   temperature2mMin?: number;
 }[];
@@ -35,21 +34,15 @@ export class WeatherWidgetComponent implements OnInit {
   protected forecastWeather = signal<forecastWeather>([]);
   protected dateToday = new Date();
   protected locationTimezone = 'CET';
-  protected weatherCodes: any;
+  protected weatherCodes = weatherCodeJson;
 
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.weatherApi();
     setInterval(() => {
       this.weatherApi();
     }, this.autoReloadInMs);
-
-    firstValueFrom(this.httpClient.get('./weathercode_icons.json'))
-      .then((weathercode) => {
-        this.weatherCodes = weathercode;
-      })
-      .catch(() => {});
   }
 
   async weatherApi(): Promise<void> {
@@ -86,7 +79,9 @@ export class WeatherWidgetComponent implements OnInit {
       temperature2m: current.variables(0)!.value(),
       relativeHumidity2m: current.variables(1)!.value(),
       precipitation: current.variables(2)!.value(),
-      weatherCode: current.variables(3)!.value(),
+      weatherCode: current
+        .variables(3)!
+        .value() as unknown as keyof typeof weatherCodeJson,
       windSpeed10m: current.variables(4)!.value(),
     });
 
@@ -98,7 +93,9 @@ export class WeatherWidgetComponent implements OnInit {
           Number(daily.timeEnd()),
           daily.interval()
         ).map((t) => new Date(t * 1000))[index],
-        weatherCode: daily.variables(0)!.valuesArray()![index],
+        weatherCode: daily.variables(0)!.valuesArray()![
+          index
+        ] as unknown as keyof typeof weatherCodeJson,
         temperature2mMax: daily.variables(1)!.valuesArray()![index],
         temperature2mMin: daily.variables(2)!.valuesArray()![index],
       });
