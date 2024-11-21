@@ -32,7 +32,8 @@
                 "input": "./node_modules/bootstrap-icons/",
                 "output": "/assets/"
               }
-            ]
+            ],
+            "allowedCommonJsDependencies": ["openmeteo"]
           },
           "configurations": {
             "production": {
