@@ -1,7 +1,15 @@
 <div class="widget">
   <div class="location-time">
-    <span>Furtwangen im Schwarzwald</span>
-    <span>
+    <span class="icon-and-text">
+      <svg class="bi" fill="currentColor">
+        <use xlink:href="assets/bootstrap-icons.svg#geo-alt" />
+      </svg>
+      Furtwangen im Schwarzwald
+    </span>
+    <span class="icon-and-text">
+      <svg class="bi" fill="currentColor">
+        <use xlink:href="assets/bootstrap-icons.svg#clock" />
+      </svg>
       {{
         currentWeather().time | date : "EEEE, H:mm" : locationTimezone : "de-de"
       }}

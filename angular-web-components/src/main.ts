@@ -31,7 +31,5 @@ createApplication({
       });
       customElements.define(selector, ngElement);
     });
-
-    //app.bootstrap(LayoutComponent);
   })
   .catch((err) => console.error(err));

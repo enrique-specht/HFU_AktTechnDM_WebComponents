@@ -30,10 +30,11 @@ export class WeatherWidgetComponent implements OnInit {
   private forecastDays = 7;
   private autoReloadInMs = 10 * 60 * 1000; // 10 min
   private locationLatLong = [48.0516, 8.2072];
+  protected locationName = 'Furtwangen im Schwarzwald';
+  protected locationTimezone = 'CET';
   protected currentWeather = signal<currentWeather>({});
   protected forecastWeather = signal<forecastWeather>([]);
   protected dateToday = new Date();
-  protected locationTimezone = 'CET';
   protected weatherCodes = weatherCodeJson;
 
   constructor() {}
