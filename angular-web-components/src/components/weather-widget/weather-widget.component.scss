@@ -2,7 +2,6 @@
   .bi {
     width: 1rem;
     height: 1rem;
-    margin: 0 0.25rem;
   }
 
   .float-right {
@@ -11,6 +10,7 @@
 
   .icon-and-text {
     display: inline-flex;
+    gap: 0.25rem;
   }
 
   .widget {
@@ -24,6 +24,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    position: relative;
   }
 
   .location-time {
@@ -31,6 +32,34 @@
     justify-content: space-between;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid black;
+    gap: 0.5rem;
+  }
+
+  .reload-button {
+    position: absolute;
+    right: 0;
+    top: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+
+    svg {
+      transition: transform 0.5s ease-in-out;
+      transform: rotate(0deg);
+    }
+
+    &:hover:not(.is-reloading) svg {
+      transform: rotate(45deg);
+    }
+  }
+
+  .is-reloading {
+    animation: rotate 1s infinite linear;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(1turn);
+    }
   }
 
   .today {
@@ -40,7 +69,7 @@
     gap: 2rem;
     width: 25rem;
     height: 5rem;
-    padding-top: 0.5rem;
+    margin-top: 1rem;
 
     .temperature {
       width: 4rem;

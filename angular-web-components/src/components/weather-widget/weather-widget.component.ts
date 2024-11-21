@@ -34,19 +34,22 @@ export class WeatherWidgetComponent implements OnInit {
   protected locationTimezone = 'CET';
   protected currentWeather = signal<currentWeather>({});
   protected forecastWeather = signal<forecastWeather>([]);
-  protected dateToday = new Date();
   protected weatherCodes = weatherCodeJson;
+  protected lastReload = new Date();
+  protected isWeatherReloading = false;
 
   constructor() {}
 
   ngOnInit(): void {
-    this.weatherApi();
+    this.fetchWeatherApi();
     setInterval(() => {
-      this.weatherApi();
+      this.fetchWeatherApi();
     }, this.autoReloadInMs);
   }
 
-  async weatherApi(): Promise<void> {
+  async fetchWeatherApi(): Promise<void> {
+    this.isWeatherReloading = true;
+
     const range = (start: number, stop: number, step: number) =>
       Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
 
@@ -75,7 +78,7 @@ export class WeatherWidgetComponent implements OnInit {
 
     this.locationTimezone = response.timezoneAbbreviation()!;
 
-    this.currentWeather.set({
+    const tempCurrentWeather = {
       time: new Date(Number(current.time()) * 1000),
       temperature2m: current.variables(0)!.value(),
       relativeHumidity2m: current.variables(1)!.value(),
@@ -84,7 +87,7 @@ export class WeatherWidgetComponent implements OnInit {
         .variables(3)!
         .value() as unknown as keyof typeof weatherCodeJson,
       windSpeed10m: current.variables(4)!.value(),
-    });
+    };
 
     const tempForecastWeather: forecastWeather = [];
     for (let index = 0; index < this.forecastDays; index++) {
@@ -101,6 +104,11 @@ export class WeatherWidgetComponent implements OnInit {
         temperature2mMin: daily.variables(2)!.valuesArray()![index],
       });
     }
+
+    this.currentWeather.set(tempCurrentWeather);
     this.forecastWeather.set(tempForecastWeather);
+    this.lastReload = new Date();
+    this.isWeatherReloading = false;
+    console.log('Updated Weather');
   }
 }
